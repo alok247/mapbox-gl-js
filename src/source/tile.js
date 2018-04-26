@@ -418,7 +418,7 @@ class Tile {
         }
     }
 
-    setFeatureState(states: LayerFeatureStates) {
+    setFeatureState(states: LayerFeatureStates, painter: any) {
         if (!this.latestRawTileData || Object.keys(states).length === 0) return;
 
         if (!this.vtLayers) {
@@ -434,6 +434,9 @@ class Tile {
             if (!sourceLayer || !sourceLayerStates || Object.keys(sourceLayerStates).length === 0) continue;
 
             bucket.update(sourceLayerStates, sourceLayer);
+            if (painter && painter.style) {
+                this.queryPadding = Math.max(this.queryPadding, painter.style.getLayer(bucket.layerIds[0]).queryRadius(bucket));
+            }
         }
     }
 }
